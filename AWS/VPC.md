@@ -54,8 +54,28 @@
     - 트래픽이 어디로 가야할 지 알려주는 이정표
     - 기본적으로 VPC 생성 시 기본 생성
 6. Network Address Translation Instance / NAT GateWay
+    - NAT Instance / NAT Gateway
+        - private Instance 가 외부의 인터넷과 통신하기 위한 통로
+        - Nat Instance [단일 Instance] 
+            - SG 영향 받음 
+            - 사용 시 Source / Destination Check 해제해야 함
+            - public subnet 사용해야 함
+        - Nat Gateway [AWS 제공 서비스]
+            - SG 영향 x
+            - 최근 트렌드
 7.Bastion Host
+    - Private Instance 에 접근하기 위한 Instance 
+    - Public Subnet에 위치해야 함
 8. VPC EndPoint 
+    - AWS PrivateL?ink 구동 지원 AWS 서비스 및 VPC 엔드포인트 서비스에 `비공개`로 연결 가능
+    - VPC 인스턴스는 서비스 리소스와 통신 시 `퍼블릭 IP 주소를 필요로 하지 않습니다.`
+    - VPC 와 기타 서비스 간의 트래픽은 `Amazon 네트워크를 벗어나지 않습니다.`
+    - `Interface EndPoint` : (Elastic Network Interface) 기반
+        - private ip를 만들어 서비스로 연결
+        - SQS , SNS Kinesis , Sagemaker 등 많은 서비스를 지원 
+    - `Gateway Endpoint` : 라우팅 테이블에서 경로의 대상으로 지정하여 사용
+        - S3 , DynamoDB 지원
+
 
 
 
