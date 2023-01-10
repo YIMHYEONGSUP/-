@@ -149,3 +149,36 @@
     - 해당 LSN 의 쿼리를 처리하려면 이전 LSN 쿼리들이 처리되어야 함
         - LSN : 10 > 이전 LSN 0~9 가 완료가 되어야 함
     
+## Segment 
+- ### 특징
+    - Aurora 는 10GB 단위의 세그먼트로 저장
+        - 총 6개의 세그먼트로 구성
+    - 총 3개의 Full Segment와 3개의 Tail Segment 로 구성
+        - Full Segment : 10GB 데이터와 로그 레코드 (3)
+        - Tail Segment : 10GB 로그 레코드 (3)
+    - 쿼럼 최소 숫자 (갱신)
+        - 분산 노드 6개 기준
+        - 쓰기 쿼럼은 4개 이상이며 3개의 Full Segment 
+        - 읽기 쿼럼은 3개 이상이며 적어도 하나의 Full Segment 
+- ### 복구 방법
+    - Tail Segment 
+        - 다른 Taile Segment 에서 복사
+    - Full Segmnet 
+        - 모든 노드들이 각각 다른 상태를 가지고 있음
+        - 다른 노드들의 Tail Segmennt 갱신
+
+## 비용 절감 팁
+- Tail / Full Segment 구조로 데이터 총 에 따른 비용 ( 6배 x 3.x배 o )
+- 쿼럼 모델에 따라 다양한 저장 스토리지 사용
+    - ThroughPut 이 필요할 때 HDD 빠른 엑세스 SSD 등으로 선택 사용
+    - 로컬 디스크 , 리모트 디스크 병행 사용
+    
+
+
+
+
+
+
+
+
+
