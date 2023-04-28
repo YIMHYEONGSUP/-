@@ -1,0 +1,16 @@
+spring:
+  server:
+    port:8080
+
+  # db 설정
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+
+# logging 설정
+logging.level:
+  org.hibernate.SQL: debug
+  ##org.hibernate.type: trace

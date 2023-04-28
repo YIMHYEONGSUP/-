@@ -25,4 +25,6 @@ class WebConfig : WebFluxConfigurer{
             .addResourceLocations("/public", "classpath:/static/")
             .setCacheControl(CacheControl.maxAge(365, TimeUnit.DAYS))
     }
+
+
 }

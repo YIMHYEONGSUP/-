@@ -1,0 +1,97 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+	id 'org.springframework.boot' version '3.0.5'
+	id 'io.spring.dependency-management' version '1.1.0'
+	id 'org.jetbrains.kotlin.jvm' version '1.7.22'
+	id 'org.jetbrains.kotlin.plugin.spring' version '1.7.22'
+
+	id 'nu.studer.jooq' version '6.0.1'  // gradle-jooq-plugin
+}
+
+group = 'hyeong'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	implementation 'org.springframework.boot:spring-boot-starter-jooq'
+	runtimeOnly 'com.h2database:h2'
+	jooqGenerator('com.h2database:h2')
+	implementation 'com.h2database:h2:2.1.214'
+
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+	implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions'
+	implementation 'org.jetbrains.kotlin:kotlin-reflect'
+	implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+
+}
+
+tasks.withType(KotlinCompile) {
+	kotlinOptions {
+		freeCompilerArgs = ['-Xjsr305=strict']
+		jvmTarget = '17'
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+jooq {
+	version = '3.15.1'
+	edition = nu.studer.gradle.jooq.JooqEdition.OSS
+
+	configurations {
+		main {
+			generateSchemaSourceOnCompilation = true
+
+			generationTool {
+				logging = 'WARN'
+				onError = 'LOG'
+
+				jdbc {
+					driver = 'org.h2.Driver'
+					url = 'jdbc:h2:mem:test;DB_CLOSE_DELAY=-1'
+					user = 'sa'
+					password = ''
+				}
+
+				generator {
+					name = 'org.jooq.codegen.DefaultGenerator'
+					strategy {
+						name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+					}
+					database {
+						name = 'org.jooq.meta.h2.H2Database'
+						inputSchema = 'PUBLIC'
+
+						includes = '.*'
+						excludes = ''
+					}
+					generate {
+						generatedSerialVersionUID = 'CONSTANT'
+						javaTimeTypes = true
+
+						deprecated = false
+						records = true
+						immutablePojos = true
+						fluentSetters = true
+					}
+					target {
+						packageName = 'kotlin-jooq.hyeong.kotlinjooq'
+						directory = 'src/main/kotlin'
+					}
+				}
+			}
+		}
+	}
+}

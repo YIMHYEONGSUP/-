@@ -1,0 +1,11 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+    plugins {
+        id 'org.jooq' version '3.15.5'
+    }
+}
